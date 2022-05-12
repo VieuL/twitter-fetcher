@@ -15,10 +15,10 @@ type CustomTweet struct {
 	twitter.Tweet
 }
 
-func processingTweet(tweet *twitter.Tweet) {
+func (d Configuration) processingTweet(tweet *twitter.Tweet) {
 	postBody, err := json.Marshal(CustomTweet{
-		Name:     CONFIG.Name,
-		KeyWords: CONFIG.KeyWords,
+		Name:     d.Name,
+		KeyWords: d.KeyWords,
 		Tweet:    *tweet,
 	})
 	if err != nil {
@@ -26,7 +26,7 @@ func processingTweet(tweet *twitter.Tweet) {
 		return
 	}
 	responseBody := bytes.NewBuffer(postBody)
-	resp, err := http.Post(CONFIG.CallBackUrl, "application/json", responseBody)
+	resp, err := http.Post(d.CallBackUrl, "application/json", responseBody)
 	if err != nil {
 		log.Println("Can't post tweet", err)
 		return

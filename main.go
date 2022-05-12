@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"sync"
 
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
@@ -10,25 +11,34 @@ import (
 )
 
 var CONFIG = readConfig()
+var wg sync.WaitGroup
 
 func main() {
 	importEnv()
 	client := twitterConnexion()
-	stream := createStreaming(client, CONFIG.Principal)
-	demux := twitter.NewSwitchDemux()
-	demux.Tweet = processingTweet
-	for message := range stream.Messages {
-		log.Println("Received message")
-		go demux.Handle(message)
+	for _, config := range CONFIG {
+		wg.Add(1)
+		go processingForOneConfiguration(client, config)
 	}
+	wg.Wait()
 
 }
 
 func importEnv() {
 	err := godotenv.Load(".env")
-
 	if err != nil {
 		log.Fatalf("Error loading .env file")
+	}
+}
+
+func processingForOneConfiguration(client *twitter.Client, configuration Configuration) {
+	defer wg.Done()
+	stream := createStreaming(client, configuration.Principal)
+	demux := twitter.NewSwitchDemux()
+	demux.Tweet = configuration.processingTweet
+	for message := range stream.Messages {
+		log.Println("Received message")
+		go demux.Handle(message)
 	}
 }
 
@@ -59,9 +69,4 @@ func createStreaming(client *twitter.Client, track []string) *twitter.Stream {
 		log.Fatal("Use of the stream is impossible")
 	}
 	return stream
-}
-
-func processing() error {
-
-	return nil
 }

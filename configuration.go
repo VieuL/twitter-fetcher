@@ -13,7 +13,7 @@ type Configuration struct {
 	CallBackUrl string
 }
 
-func readConfig() Configuration {
+func readConfig() []Configuration {
 	log.Println("Reading configuration file")
 	path := "./config.json"
 	readData, err := ioutil.ReadFile(path)
@@ -21,7 +21,7 @@ func readConfig() Configuration {
 		log.Fatalf("Can't read global configuration, check if the file : ./config.json exist")
 		panic(err)
 	}
-	data := Configuration{}
+	data := []Configuration{}
 	err = json.Unmarshal(readData, &data)
 	if err != nil {
 		log.Fatalf("Can't read Json file")
