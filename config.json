@@ -1,0 +1,6 @@
+{
+    "Name": "hydrogen",
+    "Principal": ["hydrogen", "H2"],
+    "KeyWords": ["hydrogen", "H2", "energy", "future"],
+    "CallBackUrl": "http://127.0.0.1:5000/processing"
+}
