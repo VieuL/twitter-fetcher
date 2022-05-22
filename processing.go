@@ -32,5 +32,4 @@ func (d Configuration) processingTweet(tweet *twitter.Tweet) {
 		return
 	}
 	log.Println("Call back response : ", resp.StatusCode)
-	return
 }

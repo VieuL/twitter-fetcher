@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"sync"
@@ -17,6 +18,7 @@ func main() {
 	importEnv()
 	client := twitterConnexion()
 	for _, config := range CONFIG {
+		fmt.Println(config.Name)
 		wg.Add(1)
 		go processingForOneConfiguration(client, config)
 	}
@@ -37,7 +39,7 @@ func processingForOneConfiguration(client *twitter.Client, configuration Configu
 	demux := twitter.NewSwitchDemux()
 	demux.Tweet = configuration.processingTweet
 	for message := range stream.Messages {
-		log.Println("Received message")
+		log.Println("Received message for " + configuration.Name)
 		go demux.Handle(message)
 	}
 }
