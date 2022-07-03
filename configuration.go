@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+
+	"github.com/joho/godotenv"
 )
 
 type Configuration struct {
@@ -28,4 +30,11 @@ func readConfig() []Configuration {
 		panic(err)
 	}
 	return data
+}
+
+func importEnv() {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
 }

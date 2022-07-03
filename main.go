@@ -8,7 +8,6 @@ import (
 
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
-	"github.com/joho/godotenv"
 )
 
 var CONFIG = readConfig()
@@ -24,13 +23,6 @@ func main() {
 	}
 	wg.Wait()
 
-}
-
-func importEnv() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
 }
 
 func processingForOneConfiguration(client *twitter.Client, configuration Configuration) {
